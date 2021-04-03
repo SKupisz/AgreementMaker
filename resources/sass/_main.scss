@@ -1,0 +1,45 @@
+body{
+    margin: 0;
+    padding: 0;
+    background: rgb(240,240,240);
+}
+.block-center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.welcome-header{
+    width: calc(90% - 20px);
+    padding: 10px;
+    text-align: center;
+    font-size: 2.8em;
+    font-family: "Oswald",sans-serif;
+    letter-spacing: 0.1em;
+    margin-bottom: 40px;
+}
+.describe{
+    width: calc(70% - 10px);
+    padding: 5px;
+    text-align: center;
+    font-size: 1.6em;
+    font-family: "Oswald",sans-serif;
+    transform: rotate(-2deg);
+    margin-bottom: 50px;
+}
+a{
+    text-decoration: none !important;
+    color: black;
+}
+.go-to-agreement{
+    padding: 10px 20px;
+    font-size: 1.7em;
+    font-family: "Bebas Neue",sans-serif;
+    border: none;
+    border-radius: 10px;
+    background: rgba(200,200,200,.9); 
+    text-transform: uppercase;
+    transition: all 0.4s;
+}
+.go-to-agreement:hover{
+    filter: brightness(70%);
+}
