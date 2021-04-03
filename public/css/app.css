@@ -122,14 +122,14 @@ a {
   outline: none;
 }
 
-.agreement-form-container .agreement-content .point-label,
-.agreement-form-container .agreement-content .point-content,
-.agreement-form-container .agreement-content .delete-button {
+.agreement-form-container .agreement-content .agreement-points .point-label,
+.agreement-form-container .agreement-content .agreement-points .point-content,
+.agreement-form-container .agreement-content .agreement-points .delete-button {
   display: inline-block;
   font-size: 1.1em;
 }
 
-.agreement-form-container .agreement-content .point-content {
+.agreement-form-container .agreement-content .agreement-points .point-content {
   min-width: calc(80% - 10px);
   max-width: calc(80% - 10px);
   padding: 5px;
@@ -142,11 +142,11 @@ a {
   max-height: 17vh;
 }
 
-.agreement-form-container .agreement-content .point-content:hover {
+.agreement-form-container .agreement-content .agreement-points .point-content:hover {
   filter: brightness(40%);
 }
 
-.agreement-form-container .agreement-content .point-label {
+.agreement-form-container .agreement-content .agreement-points .point-label {
   vertical-align: top;
   margin: 7px 5px;
   font-family: "Bebas Neue", sans-serif;
@@ -166,6 +166,30 @@ a {
 
 .agreement-form-container .agreement-content .delete-button:hover {
   filter: brightness(70%);
+}
+
+.agreement-form-container .agreement-content .agreements-signatures {
+  position: relative;
+  top: 20px;
+  padding-bottom: 10px;
+}
+
+.agreement-form-container .agreement-content .agreements-signatures .agreement-sign-wrapper {
+  width: calc(90% - 10px);
+  padding: 5px;
+  margin-bottom: 7px;
+}
+
+.agreement-form-container .agreement-content .agreements-signatures .agreement-sign {
+  width: calc(50% - 20px);
+  padding: 10px;
+  display: inline-block;
+  font-size: 1.1em;
+  font-family: "Oswald", sans-serif;
+  text-indent: 1em;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 1px 1px 10px #ccc;
 }
 
 .agreement-form-container .submit-btn {

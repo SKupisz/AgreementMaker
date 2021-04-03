@@ -65977,13 +65977,18 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
       elementsList: [],
       currentParagraphNumber: 1,
       displayList: [],
-      signaturesDisplayList: []
+      signaturesList: [],
+      signaturesDisplayList: [],
+      currentSignaturesNumber: 1
     };
     _this.AddNewParagraph = _this.AddNewParagraph.bind(_assertThisInitialized(_this));
     _this.deleteTheParagraph = _this.deleteTheParagraph.bind(_assertThisInitialized(_this));
     _this.changeTheParagraph = _this.changeTheParagraph.bind(_assertThisInitialized(_this));
     _this.addSignature = _this.addSignature.bind(_assertThisInitialized(_this));
+    _this.changeTheSignature = _this.changeTheSignature.bind(_assertThisInitialized(_this));
+    _this.deleteTheSignature = _this.deleteTheSignature.bind(_assertThisInitialized(_this));
     _this.putOnDisplay = _this.putOnDisplay.bind(_assertThisInitialized(_this));
+    _this.displaySignatures = _this.displaySignatures.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -66035,11 +66040,54 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "addSignature",
-    value: function addSignature() {}
+    value: function addSignature() {
+      var _this4 = this;
+
+      if (this.state.currentSignaturesNumber <= 1) {
+        var operand = this.state.signaturesList;
+        operand.push([this.state.currentSignaturesNumber, ""]);
+        this.setState({
+          signaturesList: operand,
+          currentSignaturesNumber: this.state.currentSignaturesNumber + 1
+        }, function () {
+          _this4.displaySignatures();
+        });
+      }
+    }
+  }, {
+    key: "changeTheSignature",
+    value: function changeTheSignature(event, signNumber) {
+      var operand = this.state.signaturesList;
+      operand[signNumber - 1][1] = event.target.value;
+      this.setState({
+        signaturesList: operand
+      }, function () {});
+    }
+  }, {
+    key: "deleteTheSignature",
+    value: function deleteTheSignature(signNumber) {
+      var _this5 = this;
+
+      var operand = this.state.signaturesList;
+      operand = operand.filter(function (elem) {
+        return elem[0] !== signNumber;
+      });
+
+      for (var i = 1; i <= operand.length; i++) {
+        operand[i - 1][0] = i;
+      }
+
+      this.setState({
+        signaturesList: operand,
+        currentSignaturesNumber: this.state.currentSignaturesNumber - 1
+      }, function () {
+        _this5.displaySignatures();
+      });
+    }
   }, {
     key: "putOnDisplay",
     value: function putOnDisplay() {
-      var _this4 = this;
+      var _this6 = this;
 
       var arrayOfPoints = this.state.elementsList.map(function (elem) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -66049,7 +66097,7 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
           className: "point-label"
         }, "\xA7", elem[0]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
           onChange: function onChange(event) {
-            _this4.changeTheParagraph(event, elem[0]);
+            _this6.changeTheParagraph(event, elem[0]);
           },
           required: true,
           name: "paragraph".concat(elem[0]),
@@ -66059,15 +66107,50 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
           type: "button",
           className: "delete-button",
           onClick: function onClick() {
-            _this4.deleteTheParagraph(elem[0]);
+            _this6.deleteTheParagraph(elem[0]);
           }
         }, "\u274C"));
       });
       this.setState({
         displayList: null
       }, function () {
-        _this4.setState({
+        _this6.setState({
           displayList: arrayOfPoints
+        }, function () {});
+      });
+    }
+  }, {
+    key: "displaySignatures",
+    value: function displaySignatures() {
+      var _this7 = this;
+
+      var arrayOfSignatures = this.state.signaturesList.map(function (elem) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "agreement-sign-wrapper block-center"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+          type: "text",
+          name: "signature" + elem[0],
+          id: "",
+          className: "agreement-sign",
+          required: "required",
+          placeholder: "Signatory nr ".concat(elem[0], "'s name"),
+          defaultValue: elem[1],
+          onChange: function onChange() {
+            _this7.changeTheSignature(event, elem[0]);
+          }
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          type: "button",
+          className: "delete-signature-btn delete-button",
+          onClick: function onClick() {
+            _this7.deleteTheSignature(elem[0]);
+          }
+        }, "\u274C"));
+      });
+      this.setState({
+        signaturesDisplayList: null
+      }, function () {
+        _this7.setState({
+          signaturesDisplayList: arrayOfSignatures
         }, function () {});
       });
     }
@@ -66075,11 +66158,12 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.putOnDisplay();
+      this.displaySignatures();
     }
   }, {
     key: "render",
     value: function render() {
-      var _this5 = this;
+      var _this8 = this;
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "agreement-content"
@@ -66089,11 +66173,14 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
         type: "button",
         className: "menu-btn",
         onClick: function onClick() {
-          return _this5.AddNewParagraph();
+          _this8.AddNewParagraph();
         }
       }, "Add paragraph"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        className: "menu-btn"
+        className: "menu-btn",
+        onClick: function onClick() {
+          _this8.addSignature();
+        }
       }, "Add signature")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "agreement-points",
         ref: this.mainPartRef

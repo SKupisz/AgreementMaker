@@ -55,29 +55,31 @@
                 outline: none;
             }
         }
-        .point-label,.point-content, .delete-button{
-            display: inline-block;
-            font-size: 1.1em;
-        }
-        .point-content{
-            min-width: calc(80% - 10px);
-            max-width: calc(80% - 10px);
-            padding: 5px;
-            font-family: "Oswald",sans-serif;
-            border: none;
-            background: rgba(200,200,200,.1);
-            border-radius: 10px;
-            transition: all 0.4s;
-            min-height: 10vh;
-            max-height: 17vh;
-        }
-        .point-content:hover{
-            filter: brightness(40%);
-        }
-        .point-label{
-            vertical-align: top;
-            margin: 7px 5px;
-            font-family: "Bebas Neue",sans-serif;
+        .agreement-points{
+            .point-label,.point-content, .delete-button{
+                display: inline-block;
+                font-size: 1.1em;
+            }
+            .point-content{
+                min-width: calc(80% - 10px);
+                max-width: calc(80% - 10px);
+                padding: 5px;
+                font-family: "Oswald",sans-serif;
+                border: none;
+                background: rgba(200,200,200,.1);
+                border-radius: 10px;
+                transition: all 0.4s;
+                min-height: 10vh;
+                max-height: 17vh;
+            }
+            .point-content:hover{
+                filter: brightness(40%);
+            }
+            .point-label{
+                vertical-align: top;
+                margin: 7px 5px;
+                font-family: "Bebas Neue",sans-serif;
+            }
         }
         .delete-button{
             padding: 10px;
@@ -92,6 +94,28 @@
         }
         .delete-button:hover{
             filter: brightness(70%);   
+        }
+        .agreements-signatures{
+            position: relative;
+            top: 20px;
+            padding-bottom: 10px;
+            .agreement-sign-wrapper{
+                width: calc(90% - 10px);
+                padding: 5px;
+                margin-bottom: 7px;
+            }
+            .agreement-sign{
+                width: calc(50% - 20px);
+                padding: 10px;
+                display: inline-block;
+                font-size: 1.1em;
+                font-family: "Oswald",sans-serif;
+                text-indent: 1em;
+                border-radius: 5px;
+                border: none;
+                box-shadow: 1px 1px 10px #ccc;
+                
+            }
         }
     }
     .submit-btn{
