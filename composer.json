@@ -13,7 +13,9 @@
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.8",
-        "phpoffice/phpword": "^0.18.1"
+        "mpdf/mpdf": "^8.0",
+        "phpoffice/phpword": "^0.18.1",
+        "tecnickcom/tcpdf": "^6.4"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

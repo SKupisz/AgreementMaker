@@ -6,6 +6,10 @@ export default class AgreementManagement extends React.Component{
         super(props);
 
         this.mainPartRef = React.createRef();
+        this.downloadWayRef = React.createRef();
+        this.docxRef = React.createRef();
+        this.htmlRef = React.createRef();
+        this.pdfRef = React.createRef();
 
         this.state = {
             elementsList: [],
@@ -23,6 +27,9 @@ export default class AgreementManagement extends React.Component{
         this.addSignature = this.addSignature.bind(this);
         this.changeTheSignature = this.changeTheSignature.bind(this);
         this.deleteTheSignature = this.deleteTheSignature.bind(this);
+
+        this.changeTheDownloadWay = this.changeTheDownloadWay.bind(this);
+        this.changeTheChosenBtn = this.changeTheChosenBtn.bind(this);
 
         this.putOnDisplay = this.putOnDisplay.bind(this);
         this.displaySignatures = this.displaySignatures.bind(this);
@@ -120,6 +127,25 @@ export default class AgreementManagement extends React.Component{
             }, () => {});
         });
     }
+    changeTheChosenBtn(newlyChosen,notChosen1,notChosen2){
+        notChosen1.current.classList.remove("chosen-btn");
+        notChosen2.current.classList.remove("chosen-btn");
+        newlyChosen.current.classList.add("chosen-btn");
+    }
+    changeTheDownloadWay(event){
+        let btnValue = event.target.value;
+        btnValue = btnValue.toLowerCase();
+        this.downloadWayRef.current.value = btnValue;
+        if(btnValue.toLowerCase() === "docx"){
+            this.changeTheChosenBtn(this.docxRef,this.htmlRef,this.pdfRef);
+        }
+        else if(btnValue.toLowerCase() === "html"){
+            this.changeTheChosenBtn(this.htmlRef,this.docxRef,this.pdfRef);
+        }
+        else if(btnValue.toLowerCase() === "pdf"){
+            this.changeTheChosenBtn(this.pdfRef,this.htmlRef,this.docxRef);
+        }
+    }
     componentDidMount(){
         this.putOnDisplay();
         this.displaySignatures();
@@ -128,14 +154,21 @@ export default class AgreementManagement extends React.Component{
         return(
             <div className="agreement-content">
                 <div className="main-menu-container block-center">
-                    <button type = "button" className="menu-btn" onClick = {() => {this.AddNewParagraph();}}>Add paragraph</button>
-                    <button type="button" className="menu-btn" onClick = {() => {this.addSignature();}}>Add signature</button>
+                    <button type = "button" className="menu-btn" onClick = {() => {this.AddNewParagraph();}}>Add a paragraph</button>
+                    <button type="button" className="menu-btn" onClick = {() => {this.addSignature();}}>Add a signature</button>
                 </div>
                 <div className="agreement-points" ref = {this.mainPartRef}>
                     {this.state.displayList}
                 </div>
                 <div className="agreements-signatures">                    
                     {this.state.signaturesDisplayList}
+                </div>
+                <div className="agreement-way-of-export">
+                    <header className="way-header block-center">Download as</header>
+                    <button type="button" className="agreement-way-btn" onClick = {() => {this.changeTheDownloadWay(event);}} ref = {this.docxRef} value = "Docx">Docx</button>
+                    <button type="button" className="agreement-way-btn" onClick = {() => {this.changeTheDownloadWay(event);}} ref = {this.htmlRef} value = "HTML">HTML</button>
+                    <button type="button" className="agreement-way-btn chosen-btn" onClick = {() => {this.changeTheDownloadWay(event);}} ref = {this.pdfRef} value = "PDF">PDF</button>
+                    <input type="hidden" name="wayOfDownload" ref = {this.downloadWayRef} defaultValue="PDF"/>
                 </div>
             </div>
         );

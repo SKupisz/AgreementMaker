@@ -65973,6 +65973,10 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     _this.mainPartRef = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
+    _this.downloadWayRef = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
+    _this.docxRef = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
+    _this.htmlRef = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
+    _this.pdfRef = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
     _this.state = {
       elementsList: [],
       currentParagraphNumber: 1,
@@ -65987,6 +65991,8 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
     _this.addSignature = _this.addSignature.bind(_assertThisInitialized(_this));
     _this.changeTheSignature = _this.changeTheSignature.bind(_assertThisInitialized(_this));
     _this.deleteTheSignature = _this.deleteTheSignature.bind(_assertThisInitialized(_this));
+    _this.changeTheDownloadWay = _this.changeTheDownloadWay.bind(_assertThisInitialized(_this));
+    _this.changeTheChosenBtn = _this.changeTheChosenBtn.bind(_assertThisInitialized(_this));
     _this.putOnDisplay = _this.putOnDisplay.bind(_assertThisInitialized(_this));
     _this.displaySignatures = _this.displaySignatures.bind(_assertThisInitialized(_this));
     return _this;
@@ -66155,6 +66161,28 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
+    key: "changeTheChosenBtn",
+    value: function changeTheChosenBtn(newlyChosen, notChosen1, notChosen2) {
+      notChosen1.current.classList.remove("chosen-btn");
+      notChosen2.current.classList.remove("chosen-btn");
+      newlyChosen.current.classList.add("chosen-btn");
+    }
+  }, {
+    key: "changeTheDownloadWay",
+    value: function changeTheDownloadWay(event) {
+      var btnValue = event.target.value;
+      btnValue = btnValue.toLowerCase();
+      this.downloadWayRef.current.value = btnValue;
+
+      if (btnValue.toLowerCase() === "docx") {
+        this.changeTheChosenBtn(this.docxRef, this.htmlRef, this.pdfRef);
+      } else if (btnValue.toLowerCase() === "html") {
+        this.changeTheChosenBtn(this.htmlRef, this.docxRef, this.pdfRef);
+      } else if (btnValue.toLowerCase() === "pdf") {
+        this.changeTheChosenBtn(this.pdfRef, this.htmlRef, this.docxRef);
+      }
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.putOnDisplay();
@@ -66175,18 +66203,51 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
         onClick: function onClick() {
           _this8.AddNewParagraph();
         }
-      }, "Add paragraph"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Add a paragraph"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         className: "menu-btn",
         onClick: function onClick() {
           _this8.addSignature();
         }
-      }, "Add signature")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "Add a signature")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "agreement-points",
         ref: this.mainPartRef
       }, this.state.displayList), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "agreements-signatures"
-      }, this.state.signaturesDisplayList));
+      }, this.state.signaturesDisplayList), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "agreement-way-of-export"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("header", {
+        className: "way-header block-center"
+      }, "Download as"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        className: "agreement-way-btn",
+        onClick: function onClick() {
+          _this8.changeTheDownloadWay(event);
+        },
+        ref: this.docxRef,
+        value: "Docx"
+      }, "Docx"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        className: "agreement-way-btn",
+        onClick: function onClick() {
+          _this8.changeTheDownloadWay(event);
+        },
+        ref: this.htmlRef,
+        value: "HTML"
+      }, "HTML"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        className: "agreement-way-btn chosen-btn",
+        onClick: function onClick() {
+          _this8.changeTheDownloadWay(event);
+        },
+        ref: this.pdfRef,
+        value: "PDF"
+      }, "PDF"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "hidden",
+        name: "wayOfDownload",
+        ref: this.downloadWayRef,
+        defaultValue: "PDF"
+      })));
     }
   }]);
 

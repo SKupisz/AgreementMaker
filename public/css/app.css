@@ -192,6 +192,38 @@ a {
   box-shadow: 1px 1px 10px #ccc;
 }
 
+.agreement-form-container .agreement-content .agreement-way-of-export {
+  position: relative;
+  top: 10px;
+  padding-bottom: 10px;
+}
+
+.agreement-form-container .agreement-content .agreement-way-of-export .way-header {
+  text-align: center;
+  font-size: 1.3em;
+  font-family: "Bebas Neue", sans-serif;
+  margin-bottom: 13px;
+}
+
+.agreement-form-container .agreement-content .agreement-way-of-export .agreement-way-btn {
+  display: inline-block;
+  margin: 2px 5px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1em;
+  font-family: "Bebas Neue", sans-serif;
+  transition: all 0.4s;
+}
+
+.agreement-form-container .agreement-content .agreement-way-of-export .agreement-way-btn:hover {
+  filter: brightness(70%);
+}
+
+.agreement-form-container .agreement-content .agreement-way-of-export .chosen-btn {
+  box-shadow: 1px 1px 7px #111;
+}
+
 .agreement-form-container .submit-btn {
   padding: 10px 20px;
   font-size: 1.3em;
