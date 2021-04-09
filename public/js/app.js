@@ -65960,6 +65960,11 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+var mic = new SpeechRecognition();
+mic.continuos = true;
+mic.interimResults = true;
+mic.lang = "us-US";
 
 var AgreementManagement = /*#__PURE__*/function (_React$Component) {
   _inherits(AgreementManagement, _React$Component);
@@ -65983,7 +65988,11 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
       displayList: [],
       signaturesList: [],
       signaturesDisplayList: [],
-      currentSignaturesNumber: 1
+      currentSignaturesNumber: 1,
+      isRecording: false,
+      currentRecordingParagraph: -1,
+      recordingEventHolder: null,
+      currentTranscript: ""
     };
     _this.AddNewParagraph = _this.AddNewParagraph.bind(_assertThisInitialized(_this));
     _this.deleteTheParagraph = _this.deleteTheParagraph.bind(_assertThisInitialized(_this));
@@ -65991,6 +66000,7 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
     _this.addSignature = _this.addSignature.bind(_assertThisInitialized(_this));
     _this.changeTheSignature = _this.changeTheSignature.bind(_assertThisInitialized(_this));
     _this.deleteTheSignature = _this.deleteTheSignature.bind(_assertThisInitialized(_this));
+    _this.transcriptTheSpeaking = _this.transcriptTheSpeaking.bind(_assertThisInitialized(_this));
     _this.changeTheDownloadWay = _this.changeTheDownloadWay.bind(_assertThisInitialized(_this));
     _this.changeTheChosenBtn = _this.changeTheChosenBtn.bind(_assertThisInitialized(_this));
     _this.putOnDisplay = _this.putOnDisplay.bind(_assertThisInitialized(_this));
@@ -66025,9 +66035,9 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
 
       for (var i = 1; i <= operand.length; i++) {
         operand[i - 1][0] = i;
-      }
+      } //console.log(operand);
 
-      console.log(operand);
+
       this.setState({
         elementsList: operand,
         currentParagraphNumber: this.state.currentParagraphNumber - 1
@@ -66038,8 +66048,14 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "changeTheParagraph",
     value: function changeTheParagraph(event, parNumber) {
-      var operand = this.state.elementsList;
-      operand[parNumber - 1][1] = event.target.value;
+      var operand = this.state.elementsList; //console.log(event.target);
+
+      if (event.target === undefined) {
+        operand[parNumber - 1][1] = event.parentNode.parentNode.querySelector(".point-content").value;
+      } else {
+        operand[parNumber - 1][1] = event.target.value;
+      }
+
       this.setState({
         elementsList: operand
       }, function () {});
@@ -66091,9 +66107,79 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
+    key: "transcriptTheSpeaking",
+    value: function transcriptTheSpeaking(event, numberOfParagraph) {
+      var _this6 = this;
+
+      if (this.state.isRecording === false && this.state.currentRecordingParagraph === -1 && this.state.recordingEventHolder === null) {
+        event.target.classList.add("recording");
+        this.setState({
+          isRecording: true,
+          currentRecordingParagraph: numberOfParagraph,
+          recordingEventHolder: event.target
+        }, function () {
+          //console.log(this.state.currentRecordingParagraph,numberOfParagraph);
+          mic.start();
+        });
+      } else if (this.state.isRecording === true && this.state.currentRecordingParagraph === numberOfParagraph && this.state.recordingEventHolder !== null) {
+        event.target.classList.remove("recording");
+        this.setState({
+          isRecording: false
+        }, function () {
+          mic.stop();
+        });
+      } else if (this.state.isRecording === true && (this.state.currentRecordingParagraph === -1 || this.state.recordingEventHolder === null)) {
+        //console.log(this.state.isRecording,this.state.currentRecordingParagraph,numberOfParagraph,this.state.recordingEventHolder);
+        this.setState({
+          isRecording: false,
+          currentRecordingParagraph: -1,
+          recordingEventHolder: null
+        }, function () {
+          mic.stop();
+        });
+      }
+
+      mic.onend = function () {
+        if (_this6.state.isRecording === true) {
+          mic.start();
+        } else {
+          //console.log(this.state.currentRecordingParagraph);
+          _this6.state.recordingEventHolder.parentNode.parentNode.querySelector(".point-content").value = _this6.state.recordingEventHolder.parentNode.parentNode.querySelector(".point-content").value + _this6.state.currentTranscript + " ";
+
+          _this6.changeTheParagraph(_this6.state.recordingEventHolder, _this6.state.currentRecordingParagraph);
+
+          _this6.setState({
+            recordingEventHolder: null,
+            currentTranscript: "",
+            currentRecordingParagraph: -1
+          }, function () {});
+        }
+      };
+
+      mic.onresult = function (event) {
+        var transcript = Array.from(event.results).map(function (result) {
+          return result[0];
+        }).map(function (result) {
+          return result.transcript;
+        }).join('');
+
+        if (_this6.state.recordingEventHolder !== null) {
+          _this6.setState({
+            currentTranscript: transcript
+          }, function () {});
+        }
+      };
+
+      mic.onstop = function () {//console.log("stop");
+      };
+
+      mic.onerror = function () {//console.log("error");
+      };
+    }
+  }, {
     key: "putOnDisplay",
     value: function putOnDisplay() {
-      var _this6 = this;
+      var _this7 = this;
 
       var arrayOfPoints = this.state.elementsList.map(function (elem) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -66103,24 +66189,32 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
           className: "point-label"
         }, "\xA7", elem[0]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
           onChange: function onChange(event) {
-            _this6.changeTheParagraph(event, elem[0]);
+            _this7.changeTheParagraph(event, elem[0]);
           },
           required: true,
           name: "paragraph".concat(elem[0]),
           id: "",
           className: "point-content"
-        }, elem[1]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        }, elem[1]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "buttons-wrapper"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+          type: "button",
+          className: "delete-button",
+          onClick: function onClick(event) {
+            _this7.transcriptTheSpeaking(event, elem[0]);
+          }
+        }, "\uD83C\uDFA4"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           type: "button",
           className: "delete-button",
           onClick: function onClick() {
-            _this6.deleteTheParagraph(elem[0]);
+            _this7.deleteTheParagraph(elem[0]);
           }
-        }, "\u274C"));
+        }, "\u274C")));
       });
       this.setState({
         displayList: null
       }, function () {
-        _this6.setState({
+        _this7.setState({
           displayList: arrayOfPoints
         }, function () {});
       });
@@ -66128,7 +66222,7 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "displaySignatures",
     value: function displaySignatures() {
-      var _this7 = this;
+      var _this8 = this;
 
       var arrayOfSignatures = this.state.signaturesList.map(function (elem) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -66142,20 +66236,22 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
           placeholder: "Signatory nr ".concat(elem[0], "'s name"),
           defaultValue: elem[1],
           onChange: function onChange() {
-            _this7.changeTheSignature(event, elem[0]);
+            _this8.changeTheSignature(event, elem[0]);
           }
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+          className: "buttons-wrapper"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
           type: "button",
           className: "delete-signature-btn delete-button",
           onClick: function onClick() {
-            _this7.deleteTheSignature(elem[0]);
+            _this8.deleteTheSignature(elem[0]);
           }
-        }, "\u274C"));
+        }, "\u274C")));
       });
       this.setState({
         signaturesDisplayList: null
       }, function () {
-        _this7.setState({
+        _this8.setState({
           signaturesDisplayList: arrayOfSignatures
         }, function () {});
       });
@@ -66191,7 +66287,7 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this8 = this;
+      var _this9 = this;
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "agreement-content"
@@ -66201,13 +66297,13 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
         type: "button",
         className: "menu-btn",
         onClick: function onClick() {
-          _this8.AddNewParagraph();
+          _this9.AddNewParagraph();
         }
       }, "Add a paragraph"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         className: "menu-btn",
         onClick: function onClick() {
-          _this8.addSignature();
+          _this9.addSignature();
         }
       }, "Add a signature")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "agreement-points",
@@ -66222,7 +66318,7 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
         type: "button",
         className: "agreement-way-btn",
         onClick: function onClick() {
-          _this8.changeTheDownloadWay(event);
+          _this9.changeTheDownloadWay(event);
         },
         ref: this.docxRef,
         value: "Docx"
@@ -66230,7 +66326,7 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
         type: "button",
         className: "agreement-way-btn",
         onClick: function onClick() {
-          _this8.changeTheDownloadWay(event);
+          _this9.changeTheDownloadWay(event);
         },
         ref: this.htmlRef,
         value: "HTML"
@@ -66238,7 +66334,7 @@ var AgreementManagement = /*#__PURE__*/function (_React$Component) {
         type: "button",
         className: "agreement-way-btn chosen-btn",
         onClick: function onClick() {
-          _this8.changeTheDownloadWay(event);
+          _this9.changeTheDownloadWay(event);
         },
         ref: this.pdfRef,
         value: "PDF"

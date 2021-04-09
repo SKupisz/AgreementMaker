@@ -165,9 +165,13 @@ a {
 
 .agreement-form-container .agreement-content .agreement-points .point-label,
 .agreement-form-container .agreement-content .agreement-points .point-content,
-.agreement-form-container .agreement-content .agreement-points .delete-button {
+.agreement-form-container .agreement-content .agreement-points .buttons-wrapper {
   display: inline-block;
   font-size: 1.1em;
+}
+
+.agreement-form-container .agreement-content .agreement-points .recording {
+  background: rgba(200, 0, 0, 0.8);
 }
 
 .agreement-form-container .agreement-content .agreement-points .point-content {
@@ -179,8 +183,8 @@ a {
   background: rgba(200, 200, 200, 0.1);
   border-radius: 10px;
   transition: all 0.4s;
-  min-height: 10vh;
-  max-height: 17vh;
+  min-height: 15vh;
+  max-height: 19vh;
 }
 
 .agreement-form-container .agreement-content .agreement-points .point-content:hover {
@@ -193,6 +197,10 @@ a {
   font-family: "Bebas Neue", sans-serif;
 }
 
+.agreement-form-container .agreement-content .agreement-points .buttons-wrapper {
+  vertical-align: top;
+}
+
 .agreement-form-container .agreement-content .delete-button {
   padding: 10px;
   border-radius: 10px;
@@ -201,8 +209,8 @@ a {
   cursor: pointer;
   transition: all 0.4s;
   box-shadow: 1px 1px 5px #ccc;
-  margin: 0px 5px;
-  vertical-align: top;
+  margin: 3px 5px;
+  display: block;
 }
 
 .agreement-form-container .agreement-content .delete-button:hover {
@@ -231,6 +239,15 @@ a {
   border-radius: 5px;
   border: none;
   box-shadow: 1px 1px 10px #ccc;
+}
+
+.agreement-form-container .agreement-content .agreements-signatures .buttons-wrapper {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.agreement-form-container .agreement-content .agreements-signatures .buttons-wrapper .delete-signature-btn {
+  margin: 0px 5px;
 }
 
 .agreement-form-container .agreement-content .agreement-way-of-export {
@@ -298,7 +315,7 @@ a {
   }
 }
 
-@media screen and (max-width: 636px) {
+@media screen and (max-width: 658px) {
   .agreement-form-container .agreement-name-header {
     width: calc(90% - 20px);
     font-size: 1.6em;

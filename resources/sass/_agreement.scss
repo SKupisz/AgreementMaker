@@ -56,9 +56,12 @@
             }
         }
         .agreement-points{
-            .point-label,.point-content, .delete-button{
+            .point-label,.point-content, .buttons-wrapper{
                 display: inline-block;
                 font-size: 1.1em;
+            }
+            .recording{
+                background: rgba(200,0,0,.8);
             }
             .point-content{
                 min-width: calc(80% - 10px);
@@ -69,8 +72,8 @@
                 background: rgba(200,200,200,.1);
                 border-radius: 10px;
                 transition: all 0.4s;
-                min-height: 10vh;
-                max-height: 17vh;
+                min-height: 15vh;
+                max-height: 19vh;
             }
             .point-content:hover{
                 filter: brightness(40%);
@@ -79,6 +82,9 @@
                 vertical-align: top;
                 margin: 7px 5px;
                 font-family: "Bebas Neue",sans-serif;
+            }
+            .buttons-wrapper{
+                vertical-align: top;
             }
         }
         .delete-button{
@@ -89,8 +95,8 @@
             cursor: pointer;
             transition: all 0.4s;
             box-shadow: 1px 1px 5px #ccc;
-            margin: 0px 5px;
-            vertical-align: top;
+            margin: 3px 5px;
+            display: block;
         }
         .delete-button:hover{
             filter: brightness(70%);   
@@ -114,7 +120,13 @@
                 border-radius: 5px;
                 border: none;
                 box-shadow: 1px 1px 10px #ccc;
-                
+            }
+            .buttons-wrapper{
+                display: inline-block;
+                vertical-align: top;
+                .delete-signature-btn{
+                    margin: 0px 5px;
+                }
             }
         }
         .agreement-way-of-export{
@@ -175,7 +187,7 @@
         }
     }    
 }
-@media screen and (max-width: 636px) {
+@media screen and (max-width: 658px) {
     .agreement-form-container{
         .agreement-name-header{
             width: calc(90% - 20px);

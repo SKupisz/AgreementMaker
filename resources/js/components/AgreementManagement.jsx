@@ -1,6 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const mic = new SpeechRecognition();
+mic.continuos = true;
+mic.interimResults = true;
+mic.lang = "us-US";
+
 export default class AgreementManagement extends React.Component{
     constructor(props){
         super(props);
@@ -17,7 +23,11 @@ export default class AgreementManagement extends React.Component{
             displayList: [],
             signaturesList: [],
             signaturesDisplayList: [],
-            currentSignaturesNumber: 1
+            currentSignaturesNumber: 1,
+            isRecording: false,
+            currentRecordingParagraph: -1,
+            recordingEventHolder: null,
+            currentTranscript: ""
         };
 
         this.AddNewParagraph = this.AddNewParagraph.bind(this);
@@ -27,6 +37,7 @@ export default class AgreementManagement extends React.Component{
         this.addSignature = this.addSignature.bind(this);
         this.changeTheSignature = this.changeTheSignature.bind(this);
         this.deleteTheSignature = this.deleteTheSignature.bind(this);
+        this.transcriptTheSpeaking = this.transcriptTheSpeaking.bind(this);
 
         this.changeTheDownloadWay = this.changeTheDownloadWay.bind(this);
         this.changeTheChosenBtn = this.changeTheChosenBtn.bind(this);
@@ -53,7 +64,7 @@ export default class AgreementManagement extends React.Component{
         for(let i = 1 ; i <= operand.length; i++ ){
             operand[i-1][0] = i;
         }
-        console.log(operand);
+        //console.log(operand);
         this.setState({
             elementsList: operand,
             currentParagraphNumber: this.state.currentParagraphNumber-1
@@ -61,7 +72,14 @@ export default class AgreementManagement extends React.Component{
     }
     changeTheParagraph(event,parNumber){
         let operand = this.state.elementsList;
-        operand[parNumber-1][1] = event.target.value;
+        //console.log(event.target);
+        if(event.target === undefined){
+            operand[parNumber-1][1] = event.parentNode.parentNode.querySelector(".point-content").value;
+        }
+        else{
+            operand[parNumber-1][1] = event.target.value;
+        }
+        
         this.setState({
             elementsList: operand
         }, () => {});
@@ -96,12 +114,72 @@ export default class AgreementManagement extends React.Component{
             currentSignaturesNumber: this.state.currentSignaturesNumber-1
         }, () => {this.displaySignatures();});
     }
+    transcriptTheSpeaking(event,numberOfParagraph){
+        if(this.state.isRecording === false && this.state.currentRecordingParagraph === -1 && this.state.recordingEventHolder === null){
+            event.target.classList.add("recording");
+            this.setState({
+                isRecording: true,
+                currentRecordingParagraph: numberOfParagraph,
+                recordingEventHolder: event.target
+            }, () => {
+                //console.log(this.state.currentRecordingParagraph,numberOfParagraph);
+                mic.start();
+            });
+        }
+        else if(this.state.isRecording === true && this.state.currentRecordingParagraph === numberOfParagraph && this.state.recordingEventHolder !== null){
+            event.target.classList.remove("recording");
+            this.setState({
+                isRecording: false
+            }, () => {mic.stop();});
+        }
+        else if(this.state.isRecording === true && (this.state.currentRecordingParagraph === -1 || this.state.recordingEventHolder === null)){
+            //console.log(this.state.isRecording,this.state.currentRecordingParagraph,numberOfParagraph,this.state.recordingEventHolder);
+            this.setState({
+                isRecording: false,
+                currentRecordingParagraph: -1,
+                recordingEventHolder: null
+            }, () => {mic.stop();});
+        }
+        mic.onend = () => {
+            if(this.state.isRecording === true){
+                mic.start();
+            }
+            else{
+                //console.log(this.state.currentRecordingParagraph);
+                this.state.recordingEventHolder.parentNode.parentNode.querySelector(".point-content").value = this.state.recordingEventHolder.parentNode.parentNode.querySelector(".point-content").value + this.state.currentTranscript + " ";
+                this.changeTheParagraph(this.state.recordingEventHolder,this.state.currentRecordingParagraph);
+                this.setState({
+                    recordingEventHolder: null,
+                    currentTranscript: "",
+                    currentRecordingParagraph: -1
+                }, () => {});
+            }
+        }
+        mic.onresult = (event) => {
+            const transcript = Array.from(event.results).map(result=>result[0]).map(result=>result.transcript).join('');
+            if(this.state.recordingEventHolder !== null){
+                this.setState({
+                    currentTranscript: transcript
+                }, () => {});
+            }
+            
+        };
+        mic.onstop = () => {
+            //console.log("stop");
+        }
+        mic.onerror = () => {
+            //console.log("error");
+        };
+    }
     
     putOnDisplay(){
         let arrayOfPoints = this.state.elementsList.map(elem => {
             return <div className="agreement-elem">
                 <label htmlFor="" className="point-label">§{elem[0]}</label><textarea onChange = {(event) => {this.changeTheParagraph(event,elem[0]);}} required name={`paragraph${elem[0]}`} id="" className="point-content">{elem[1]}</textarea>
-                <button type = "button" className="delete-button" onClick = {() => {this.deleteTheParagraph(elem[0]);}}>❌</button>
+                <span className="buttons-wrapper">
+                    <button type = "button" className="delete-button" onClick = {(event) => {this.transcriptTheSpeaking(event, elem[0]);}}>🎤</button>
+                    <button type = "button" className="delete-button" onClick = {() => {this.deleteTheParagraph(elem[0]);}}>❌</button>
+                </span>
             </div>;
         });
         this.setState({
@@ -116,7 +194,9 @@ export default class AgreementManagement extends React.Component{
         let arrayOfSignatures = this.state.signaturesList.map(elem => {
             return <div className="agreement-sign-wrapper block-center">
                 <input type="text" name={"signature"+elem[0]} id="" className="agreement-sign" required="required" placeholder={`Signatory nr ${elem[0]}'s name`} defaultValue = {elem[1]} onChange = {() => {this.changeTheSignature(event,elem[0]);}}/>
-                <button type="button" className="delete-signature-btn delete-button" onClick = {() => {this.deleteTheSignature(elem[0]);}}>❌</button>
+                <span className="buttons-wrapper">
+                    <button type="button" className="delete-signature-btn delete-button" onClick = {() => {this.deleteTheSignature(elem[0]);}}>❌</button>
+                </span>
             </div>;
         });
         this.setState({
