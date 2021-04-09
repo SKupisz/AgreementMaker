@@ -52,6 +52,47 @@ a {
   filter: brightness(70%);
 }
 
+@media screen and (max-width: 806px) {
+  .welcome-header {
+    width: calc(100% - 20px);
+    font-size: 2.5em;
+  }
+
+  .describe {
+    width: calc(80% - 10px);
+    font-size: 1.4em;
+  }
+}
+
+@media screen and (max-width: 594px) {
+  .welcome-header {
+    font-size: 2.2em;
+  }
+
+  .describe {
+    width: calc(90% - 10px);
+    font-size: 1.2em;
+  }
+
+  .go-to-agreement {
+    font-size: 1.4em;
+  }
+}
+
+@media screen and (max-width: 404px) {
+  .welcome-header {
+    font-size: 1.8em;
+  }
+
+  .describe {
+    font-size: 0.95em;
+  }
+
+  .go-to-agreement {
+    font-size: 1.2em;
+  }
+}
+
 .agreement-form-container {
   width: calc(90% - 10px);
   padding: 10px 5px;
@@ -237,6 +278,97 @@ a {
 
 .agreement-form-container .submit-btn:hover {
   filter: brightness(70%);
+}
+
+@media screen and (max-width: 864px) {
+  .agreement-form-container {
+    width: calc(95% - 10px);
+  }
+
+  .agreement-form-container .agreement-content .agreements-signatures {
+    padding-bottom: 15px;
+  }
+
+  .agreement-form-container .agreement-content .agreements-signatures .agreement-sign-wrapper {
+    width: calc(100% - 10px);
+  }
+
+  .agreement-form-container .agreement-content .agreements-signatures .agreement-sign {
+    width: calc(60% - 20px);
+  }
+}
+
+@media screen and (max-width: 636px) {
+  .agreement-form-container .agreement-name-header {
+    width: calc(90% - 20px);
+    font-size: 1.6em;
+  }
+
+  .agreement-form-container .agreement-content .main-menu-container .menu-btn {
+    font-size: 0.9em;
+  }
+
+  .agreement-form-container .agreement-content .delete-button {
+    font-size: 0.7em !important;
+  }
+
+  .agreement-form-container .agreement-content .agreement-points .point-label,
+  .agreement-form-container .agreement-content .agreement-points .point-content {
+    font-size: 0.9em;
+  }
+
+  .agreement-form-container .agreement-content .agreements-signatures .agreement-sign {
+    font-size: 0.9em;
+    text-indent: 0.8em;
+  }
+
+  .agreement-form-container .agreement-content .agreement-way-of-export .way-header {
+    font-size: 1.1em;
+  }
+
+  .agreement-form-container .agreement-content .agreement-way-of-export .agreement-way-btn {
+    font-size: 0.9em;
+  }
+
+  .agreement-form-container .submit-btn {
+    padding: 10px 15px;
+    font-size: 1.1em;
+  }
+}
+
+@media screen and (max-width: 362px) {
+  .agreement-form-container .agreement-name-header {
+    width: calc(100% - 20px);
+    font-size: 1.2em;
+  }
+
+  .agreement-form-container .agreement-content .main-menu-container .menu-btn {
+    display: block;
+    margin: 6px auto;
+    width: calc(100% - 40px);
+  }
+
+  .agreement-form-container .agreement-content .agreement-points .point-label,
+  .agreement-form-container .agreement-content .agreement-points .point-content {
+    font-size: 0.8em;
+  }
+
+  .agreement-form-container .agreement-content .agreement-points .point-content {
+    min-width: calc(70% - 10px);
+    max-width: calc(70% - 10px);
+  }
+
+  .agreement-form-container .agreement-content .agreements-signatures {
+    margin-bottom: 24px;
+  }
+
+  .agreement-form-container .agreement-content .agreements-signatures .agreement-sign {
+    width: calc(80% - 20px);
+  }
+
+  .agreement-form-container .submit-btn {
+    font-size: 0.9em;
+  }
 }
 
 /*!

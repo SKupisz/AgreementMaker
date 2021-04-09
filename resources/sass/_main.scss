@@ -43,3 +43,36 @@ a{
 .go-to-agreement:hover{
     filter: brightness(70%);
 }
+@media screen and (max-width: 806px) {
+    .welcome-header{
+        width: calc(100% - 20px);
+        font-size: 2.5em;
+    }
+    .describe{
+        width: calc(80% - 10px);
+        font-size: 1.4em;
+    }
+}
+@media screen and (max-width: 594px) {
+    .welcome-header{
+        font-size: 2.2em;
+    }
+    .describe{
+        width: calc(90% - 10px);
+        font-size: 1.2em;
+    }
+    .go-to-agreement{
+        font-size: 1.4em;
+    }
+}
+@media screen and (max-width: 404px){
+    .welcome-header{
+        font-size: 1.8em;
+    }
+    .describe{
+        font-size: 0.95em;
+    }
+    .go-to-agreement{
+        font-size: 1.2em;
+    }
+}
