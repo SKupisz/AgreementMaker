@@ -30,6 +30,9 @@ a{
     text-decoration: none !important;
     color: black;
 }
+.links-wrapper{
+    text-align: center;
+}
 .go-to-agreement{
     padding: 10px 20px;
     font-size: 1.7em;
@@ -39,6 +42,8 @@ a{
     background: rgba(200,200,200,.9); 
     text-transform: uppercase;
     transition: all 0.4s;
+    display: inline-block;
+    margin: 5px 10px;
 }
 .go-to-agreement:hover{
     filter: brightness(70%);

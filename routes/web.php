@@ -17,4 +17,7 @@ Route::get('/', function () {
 Route::get("/make-agreement",function (){
     return view("agreementForm");
 });
+Route::get("/credits",function(){
+    return view("credits");
+});
 Route::post("/makingAgreement","MainController@generateAgreement");
