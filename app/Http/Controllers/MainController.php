@@ -15,7 +15,7 @@ class MainController extends Controller
     }
     public function checkIfAWayExists($way){
         $way = strtolower($way);
-        $allowedWays = ["docx","html","pdf"];
+        $allowedWays = ["docx","html","pdf", "rtf","odtext"];
         if(in_array($way,$allowedWays) == true){
             return array_search($way,$allowedWays);
         }
@@ -86,13 +86,13 @@ class MainController extends Controller
                         return response()->download(storage_path("agreement.docx"));
                         break;
                     case 1: // downloading HTML file
-                        $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,'HTML');
-                        $xmlWriter->save(storage_path("agreement.html"));
+                        $htmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,'HTML');
+                        $htmlWriter->save(storage_path("agreement.html"));
                         return response()->download(storage_path("agreement.html"));
                         break;
                     case 2: // downloading PDF file based on the HTML file
-                        $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,'HTML');
-                        $xmlWriter->save(storage_path("agreement.html"));
+                        $htmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,'HTML');
+                        $htmlWriter->save(storage_path("agreement.html"));
                         $getHTMLAgreementCode = file_get_contents(storage_path("agreement.html"));
                         $getHTMLAgreementCode = substr($getHTMLAgreementCode,strrpos($getHTMLAgreementCode,"<body>")+6);
                         $getHTMLAgreementCode = substr($getHTMLAgreementCode,0,strrpos($getHTMLAgreementCode,"</body>"));
@@ -101,6 +101,16 @@ class MainController extends Controller
                         $mpdf->writeHTML($getCSSAgreementData,\Mpdf\HTMLParserMode::HEADER_CSS);
                         $mpdf->writeHTML($getHTMLAgreementCode, \Mpdf\HTMLParserMode::HTML_BODY);
                         $toSave = $mpdf->Output("agreement.pdf","D");
+                        break;
+                    case 3: // downloading RTF file
+                        $objectWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,"RTF");
+                        $objectWriter->save(storage_path("agreement.rtf"));
+                        return response()->download(storage_path("agreement.rtf"));
+                        break;
+                    case 4: //downloadning ODText file
+                        $objectWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord,"ODText");
+                        $objectWriter->save(storage_path("agreement.odt"));
+                        return response()->download(storage_path("agreement.odt"));
                         break;
                     default:
                         break;

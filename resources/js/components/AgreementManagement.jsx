@@ -16,6 +16,8 @@ export default class AgreementManagement extends React.Component{
         this.docxRef = React.createRef();
         this.htmlRef = React.createRef();
         this.pdfRef = React.createRef();
+        this.rtfRef = React.createRef();
+        this.odtRef = React.createRef();
 
         this.state = {
             elementsList: [],
@@ -207,9 +209,11 @@ export default class AgreementManagement extends React.Component{
             }, () => {});
         });
     }
-    changeTheChosenBtn(newlyChosen,notChosen1,notChosen2){
+    changeTheChosenBtn(newlyChosen,notChosen1,notChosen2, notChosen3, notChosen4){
         notChosen1.current.classList.remove("chosen-btn");
         notChosen2.current.classList.remove("chosen-btn");
+        notChosen3.current.classList.remove("chosen-btn");
+        notChosen4.current.classList.remove("chosen-btn");
         newlyChosen.current.classList.add("chosen-btn");
     }
     changeTheDownloadWay(event){
@@ -217,13 +221,19 @@ export default class AgreementManagement extends React.Component{
         btnValue = btnValue.toLowerCase();
         this.downloadWayRef.current.value = btnValue;
         if(btnValue.toLowerCase() === "docx"){
-            this.changeTheChosenBtn(this.docxRef,this.htmlRef,this.pdfRef);
+            this.changeTheChosenBtn(this.docxRef,this.htmlRef,this.pdfRef,this.rtfRef,this.odtRef);
         }
         else if(btnValue.toLowerCase() === "html"){
-            this.changeTheChosenBtn(this.htmlRef,this.docxRef,this.pdfRef);
+            this.changeTheChosenBtn(this.htmlRef,this.docxRef,this.pdfRef,this.rtfRef,this.odtRef);
         }
         else if(btnValue.toLowerCase() === "pdf"){
-            this.changeTheChosenBtn(this.pdfRef,this.htmlRef,this.docxRef);
+            this.changeTheChosenBtn(this.pdfRef,this.htmlRef,this.docxRef,this.rtfRef,this.odtRef);
+        }
+        else if(btnValue.toLowerCase() === "rtf"){
+            this.changeTheChosenBtn(this.rtfRef,this.pdfRef,this.htmlRef,this.docxRef,this.odtRef);
+        }
+        else if(btnValue.toLowerCase() === "odtext"){
+            this.changeTheChosenBtn(this.odtRef,this.rtfRef,this.pdfRef,this.htmlRef,this.docxRef);
         }
     }
     componentDidMount(){
@@ -248,6 +258,8 @@ export default class AgreementManagement extends React.Component{
                     <button type="button" className="agreement-way-btn" onClick = {() => {this.changeTheDownloadWay(event);}} ref = {this.docxRef} value = "Docx">Docx</button>
                     <button type="button" className="agreement-way-btn" onClick = {() => {this.changeTheDownloadWay(event);}} ref = {this.htmlRef} value = "HTML">HTML</button>
                     <button type="button" className="agreement-way-btn chosen-btn" onClick = {() => {this.changeTheDownloadWay(event);}} ref = {this.pdfRef} value = "PDF">PDF</button>
+                    <button type="button" className="agreement-way-btn" onClick = {() => {this.changeTheDownloadWay(event);}} ref = {this.rtfRef} value = "RTF">RTF</button>
+                    <button type="button" className="agreement-way-btn" onClick = {() => {this.changeTheDownloadWay(event);}} ref = {this.odtRef} value = "ODText">ODText</button>
                     <input type="hidden" name="wayOfDownload" ref = {this.downloadWayRef} defaultValue="PDF"/>
                 </div>
             </div>
